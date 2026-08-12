@@ -8,113 +8,122 @@
 </head>
 <body>
 
+  <!-- Top Navigation / Branding -->
   <header class="topbar">
     <div class="topbar-brand">
-      <span class="brand-mark">GA</span>
-      <div class="brand-text">
-        <h1>GreyAtom Logistics</h1>
-        <p>Delivery Exception Management &mdash; Operations Console</p>
+      <div class="brand-logo">GA</div>
+      <div class="brand-info">
+        <h1>GreyAtom Logistics Pvt. Ltd.</h1>
+        <p>Internal Operations Tools &bull; Delivery Exception Management Dashboard</p>
       </div>
     </div>
   </header>
 
-  <main class="layout">
+  <main class="dashboard-container">
 
-    <!-- Summary counts -->
-    <section class="stats" aria-label="Issue summary">
+    <!-- KPI / Statistics Cards (Bonus Feature) -->
+    <section class="stats-grid" aria-label="Exception Summary Statistics">
       <div class="stat-card">
-        <span class="stat-label">Total Issues</span>
+        <span class="stat-label">Total Exceptions</span>
         <span class="stat-value" id="statTotal">0</span>
       </div>
       <div class="stat-card stat-open">
-        <span class="stat-label">Open</span>
+        <span class="stat-label">Open Issues</span>
         <span class="stat-value" id="statOpen">0</span>
       </div>
       <div class="stat-card stat-resolved">
-        <span class="stat-label">Resolved</span>
+        <span class="stat-label">Resolved Issues</span>
         <span class="stat-value" id="statResolved">0</span>
       </div>
     </section>
 
-    <div class="grid">
+    <!-- Main Workspace: Form + Dashboard Table -->
+    <div class="workspace-grid">
 
-      <!-- Report form -->
-      <section class="panel form-panel" aria-labelledby="formHeading">
-        <h2 id="formHeading">Report Delivery Exception</h2>
+      <!-- 1. Delivery Exception Form Panel -->
+      <section class="panel form-panel" aria-labelledby="formTitle">
+        <h2 id="formTitle">Report Delivery Exception</h2>
+        
         <form id="exceptionForm" novalidate>
 
-          <div class="field">
+          <div class="field" id="field-deliveryId">
             <label for="deliveryId">Delivery ID <span class="required">*</span></label>
-            <input type="text" id="deliveryId" name="deliveryId" placeholder="e.g. DEL-10234" required>
-            <span class="error-text" id="err-deliveryId">Delivery ID is required.</span>
+            <input type="text" id="deliveryId" name="deliveryId" placeholder="e.g. DEL-88421" required>
+            <span class="error-message">Delivery ID is required.</span>
           </div>
 
-          <div class="field">
+          <div class="field" id="field-customerName">
             <label for="customerName">Customer Name <span class="required">*</span></label>
-            <input type="text" id="customerName" name="customerName" placeholder="e.g. Ananya Sharma" required>
-            <span class="error-text" id="err-customerName">Customer name is required.</span>
+            <input type="text" id="customerName" name="customerName" placeholder="e.g. Rajesh Sharma" required>
+            <span class="error-message">Customer Name is required.</span>
           </div>
 
-          <div class="field">
+          <div class="field" id="field-issueType">
             <label for="issueType">Issue Type <span class="required">*</span></label>
             <select id="issueType" name="issueType" required>
-              <option value="" disabled selected>Select issue type</option>
+              <option value="" disabled selected>Select issue type...</option>
               <option value="Address Not Found">Address Not Found</option>
               <option value="Customer Not Available">Customer Not Available</option>
               <option value="Payment Issue">Payment Issue</option>
               <option value="Package Damaged">Package Damaged</option>
             </select>
-            <span class="error-text" id="err-issueType">Please select an issue type.</span>
+            <span class="error-message">Please select an issue type.</span>
           </div>
 
-          <fieldset class="field">
+          <fieldset class="field" id="field-priority">
             <legend>Priority <span class="required">*</span></legend>
-            <div class="radio-group">
-              <label class="radio-option">
+            <div class="radio-options">
+              <label class="radio-label">
                 <input type="radio" name="priority" value="Low">
                 <span>Low</span>
               </label>
-              <label class="radio-option">
+              <label class="radio-label">
                 <input type="radio" name="priority" value="Medium">
                 <span>Medium</span>
               </label>
-              <label class="radio-option">
+              <label class="radio-label">
                 <input type="radio" name="priority" value="High">
                 <span>High</span>
               </label>
             </div>
-            <span class="error-text" id="err-priority">Please select a priority.</span>
+            <span class="error-message">Please select a priority level.</span>
           </fieldset>
 
-          <div class="field">
+          <div class="field" id="field-notes">
             <label for="notes">Notes <span class="optional">(optional)</span></label>
-            <textarea id="notes" name="notes" rows="3" placeholder="Additional details about the exception..."></textarea>
+            <textarea id="notes" name="notes" rows="3" placeholder="Additional details or remarks about the exception..."></textarea>
           </div>
 
-          <button type="submit" class="btn btn-primary">Log Exception</button>
+          <button type="submit" class="btn btn-primary" id="submitBtn">
+            Log Exception
+          </button>
+
         </form>
       </section>
 
-      <!-- Dashboard -->
-      <section class="panel table-panel" aria-labelledby="tableHeading">
-        <div class="table-panel-header">
-          <h2 id="tableHeading">Reported Exceptions</h2>
+      <!-- 2. Exceptions Dashboard Panel -->
+      <section class="panel table-panel" aria-labelledby="tableTitle">
+        
+        <div class="table-header">
+          <h2 id="tableTitle">Exceptions Log</h2>
 
-          <div class="filters">
-            <div class="filter-field">
-              <label for="filterType">Issue Type</label>
+          <!-- 4. Filters Controls -->
+          <div class="filters-container">
+            <div class="filter-group">
+              <label for="filterType">Issue Type:</label>
               <select id="filterType">
-                <option value="all">All types</option>
+                <option value="all">All Types</option>
                 <option value="Address Not Found">Address Not Found</option>
                 <option value="Customer Not Available">Customer Not Available</option>
                 <option value="Payment Issue">Payment Issue</option>
                 <option value="Package Damaged">Package Damaged</option>
               </select>
             </div>
-            <div class="filter-field">
-              <label for="filterStatus">Status</label>
+
+            <div class="filter-group">
+              <label for="filterStatus">Status:</label>
               <select id="filterStatus">
-                <option value="all">All statuses</option>
+                <option value="all">All Statuses</option>
                 <option value="Open">Open</option>
                 <option value="Resolved">Resolved</option>
               </select>
@@ -122,7 +131,7 @@
           </div>
         </div>
 
-        <div class="table-scroll">
+        <div class="table-responsive">
           <table id="exceptionsTable">
             <thead>
               <tr>
@@ -135,13 +144,21 @@
               </tr>
             </thead>
             <tbody id="exceptionsTableBody">
-              <!-- Rows injected by script.js -->
+              <!-- Dynamically populated rows -->
             </tbody>
           </table>
 
-          <p class="empty-state" id="emptyState">No exceptions reported yet. Use the form to log the first one.</p>
-          <p class="empty-state" id="noMatchState" hidden>No exceptions match the selected filters.</p>
+          <div class="empty-state" id="emptyState" hidden>
+            <p class="empty-title">No exceptions recorded yet.</p>
+            <p class="empty-desc">Use the form on the left to report a new delivery exception.</p>
+          </div>
+
+          <div class="empty-state" id="noMatchState" hidden>
+            <p class="empty-title">No matching exceptions found.</p>
+            <p class="empty-desc">Try adjusting your filters to see more results.</p>
+          </div>
         </div>
+
       </section>
 
     </div>
